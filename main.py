@@ -1,12 +1,14 @@
 import ctypes
 from ctypes import wintypes
 
+
 # Define the MARGINS structure
 class MARGINS(ctypes.Structure):
     _fields_ = [("cxLeftWidth", ctypes.c_int),
                 ("cxRightWidth", ctypes.c_int),
                 ("cyTopHeight", ctypes.c_int),
                 ("cyBottomHeight", ctypes.c_int)]
+
 
 # Constants
 WS_EX_LAYERED = 0x00080000
@@ -42,12 +44,14 @@ SetWindowLongA.argtypes = [wintypes.HWND, ctypes.c_int, ctypes.c_long]
 SetWindowLongA.restype = ctypes.c_long
 
 SetWindowPos = user32.SetWindowPos
-SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_uint]
+SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int,
+                         ctypes.c_uint]
 SetWindowPos.restype = wintypes.BOOL
 
 UpdateWindow = user32.UpdateWindow
 UpdateWindow.argtypes = [wintypes.HWND]
 UpdateWindow.restype = wintypes.BOOL
+
 
 # Function to hijack overlay
 def hijack_overlay():
@@ -58,7 +62,7 @@ def hijack_overlay():
 
     ShowWindow(overlay, SW_SHOW)
 
-    margins = MARGINS(-1, -1, -1, -1)  
+    margins = MARGINS(-1, -1, -1, -1)
     hr = DwmExtendFrameIntoClientArea(overlay, ctypes.byref(margins))
     if hr != 0:
         print(f"Failed to extend frame into client area. HRESULT: {hr}")
@@ -70,6 +74,7 @@ def hijack_overlay():
 
     print("Successful hijacking")
     return True
+
 
 if __name__ == "__main__":
     hijack_overlay()
